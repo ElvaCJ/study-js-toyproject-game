@@ -92,8 +92,3 @@ function updateTimerText(givenSeconds) {
     let seconds = givenSeconds % 60;
     game_timer.innerHTML = seconds < 10 ? `0${minutes}:0${seconds}` : `0${minutes}:${seconds}`;
 }
-
-
-
-// function startTimer() {};
-// function createElement() {};
