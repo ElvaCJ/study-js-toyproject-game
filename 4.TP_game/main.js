@@ -5,6 +5,8 @@ const game_timer = document.querySelector('.game_timer');
 const carrot_counter = document.querySelector('.carrot_counter');
 const pop_up = document.querySelector('.pop-up');
 const refresh_btn = document.querySelector('.refresh_btn');
+const pop_up_message = document.querySelector('.pop-up_message');
+const pop_up_win = document.querySelector('.pop-up_win');
 
 const carrot_num = 5;
 const bug_num = 5;
@@ -23,11 +25,12 @@ game_btn.addEventListener('click', () => {
     started = !started;
 });
 
+game_field.addEventListener('click', onFieldClick);
+
 function startGame() {
     // 당근과 벌레(각 5개)를 랜덤 포지션 지정 -> game_field에 추가
     game_field.innerHTML = ``;
     game_field.style.position = 'relative';
-    
     addItem('carrot', carrot_num, 'img/carrot.png');
     addItem('bug', bug_num, 'img/bug.png');
     
@@ -41,20 +44,37 @@ function startGame() {
 
     //game_timer시작 함수
     startTimer(game_duration_sec);
+    //carrot_counter 갯수 보여줌
+    carrot_counter.innerHTML = `${carrot_num}`;
 
-    //pop-up section 사라짐
+    //pop-up section 사라짐, game_btn 재등장 (+ startGame() 코드 반복)
     refresh_btn.addEventListener('click', (event)=>{
         pop_up.classList.add('pop-up--hide')
-    });
+        game_btn.style.visibility = 'visible';
+
+        game_field.innerHTML = ``;
+        game_field.style.position = 'relative';
+        addItem('carrot', carrot_num, 'img/carrot.png');
+        addItem('bug', bug_num, 'img/bug.png');
+
+        started = !started;
+
+        game_btn_icon.classList.add('fa-stop');
+        game_btn_icon.classList.remove('fa-play');
+
+        startTimer(game_duration_sec);
+        carrot_counter.innerHTML = `${carrot_num}`;
+    });  
 };
 function stopGame() {
     //start버튼 나타남
     game_btn_icon.classList.add('fa-play');
     game_btn_icon.classList.remove('fa-stop');
 
-    // game_btn.fa-stop클릭 -> pop-up section 나타남 & game_timer 중지
+    //game_btn.fa-stop클릭 -> pop-up section 나타남, game_timer 중지, game_btn 사라짐
     clearInterval(timer_interval);
     pop_up.classList.remove('pop-up--hide');
+    game_btn.style.visibility = 'hidden';
 };
 
 function addItem(className, count, imgPath) {
@@ -81,6 +101,10 @@ function startTimer(time) {
     timer_interval = setInterval(() => {
         if (time <= 0) {
             clearInterval(timer_interval);
+            //시간초과 후 pop-up섹션 등장, game_btn 사라짐, started상태 변경
+            pop_up.classList.remove('pop-up--hide');
+            game_btn.style.visibility = 'hidden';
+            started = !started;
             return;
         } else {
             updateTimerText(--time);
@@ -93,7 +117,31 @@ function updateTimerText(givenSeconds) {
     game_timer.innerHTML = seconds < 10 ? `0${minutes}:0${seconds}` : `0${minutes}:${seconds}`;
 }
 
+function onFieldClick(event) {
+    if (!started) {
+        return;
+    }
+    const clickTarget = event.target;
+    if (clickTarget.matches('.carrot')) {
+        clickTarget.remove();
+        counter++;
+        carrot_counter.innerText = carrot_num - counter;
+        if (counter === carrot_num) {
+            stopGame();
+            started = !started;
+            //counter 초기화
+            counter = 0;
 
+            pop_up_win.classList.remove('not_yet_win');
+            pop_up_message.classList.add('now_win');
+        }
+    } else if (clickTarget.matches('.bug')) {
+        stopGame();
+        started = !started;
+        //counter 초기화
+        counter = 0;
 
-// function startTimer() {};
-// function createElement() {};
+        pop_up_win.classList.add('not_yet_win');
+        pop_up_message.classList.remove('now_win');
+    }
+};
