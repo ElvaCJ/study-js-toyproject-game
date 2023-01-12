@@ -23,7 +23,7 @@
   
   2. function startTimer 내부에 function updateTimerText를 선언하고 작성하면(setInterval의 디폴트 초기 딜레이를 해결하기 위해 바로 직전에 작성) 의도대로 실행이 안됨. 즉, 1초 후 timer모양이 등장. 그런데 function updateTmerText 선언을 function startTimer 바깥에서 해준 후 호출해주거나, function으로 선언하지 않은 채 내부 코드만 작성해주면 setInterval의 딜레이 없애줌. -> 왜????? 함수 안에 또다른 함수 선언하면 안되는 건가???
 
-### third commit 
+#### third commit 
 * JS 기록
   * pop_up sectiion관련 동적 수행들 function startGame(), stopGame()에 추가 
   * carrot.img, bug.img 타겟 클릭하면 match()으로 구별해서 count해주는 게임 이벤트 함수 완성 -> function onFieldClick()
