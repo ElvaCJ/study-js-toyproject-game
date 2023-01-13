@@ -46,6 +46,7 @@ span {
     border-radius: 30px;
     background-color: #fff;
     visibility: hidden;
+    user-select: none;
 }
 .carrot_counter {
     width: 50px;
@@ -56,6 +57,7 @@ span {
     font-size: 35px;
     line-height: 54px;
     visibility: hidden;
+    user-select: none;
 }
 .game_field {
     width: 100%;
@@ -85,4 +87,11 @@ span {
 }
 .not_yet_win, .now_win {
     display: none;
+}
+
+.carrot, .bug {
+    transition: transform 40ms ease-in;
+}
+.carrot:hover, .bug:hover {
+    transform: scale(1.1);
 }

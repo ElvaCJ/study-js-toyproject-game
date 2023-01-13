@@ -8,9 +8,15 @@ const refresh_btn = document.querySelector('.refresh_btn');
 const pop_up_message = document.querySelector('.pop-up_message');
 const pop_up_win = document.querySelector('.pop-up_win');
 
-const carrot_num = 5;
-const bug_num = 5;
+const carrot_num = Math.floor(Math.random()*10) + 6;
+const bug_num = Math.floor(Math.random()*10) + 6;
 const game_duration_sec = 10;
+
+const carrot_sound = new Audio('sound/carrot_pull.mp3');
+const bug_sound = new Audio('sound/bug_pull.mp3');
+const bg_sound = new Audio ('sound/bg.mp3');
+const alert_sound = new Audio ('sound/alert.wav');
+const win_sound = new Audio ('sound/game_win.mp3');
 
 let started = false;
 let counter = 0;
@@ -18,6 +24,7 @@ let timer_interval = undefined;
 
 game_btn.addEventListener('click', () => {
     if (started) {
+        alert_sound.play();
         stopGame()
     } else {
         startGame()
@@ -28,6 +35,10 @@ game_btn.addEventListener('click', () => {
 game_field.addEventListener('click', onFieldClick);
 
 function startGame() {
+    //background sound 처음부터 재생
+    bg_sound.currentTime = 0;
+    bg_sound.play();
+
     // 당근과 벌레(각 5개)를 랜덤 포지션 지정 -> game_field에 추가
     game_field.innerHTML = ``;
     game_field.style.position = 'relative';
@@ -52,6 +63,9 @@ function startGame() {
         pop_up.classList.add('pop-up--hide')
         game_btn.style.visibility = 'visible';
 
+        bg_sound.currentTime = 0;
+        bg_sound.play();
+
         game_field.innerHTML = ``;
         game_field.style.position = 'relative';
         addItem('carrot', carrot_num, 'img/carrot.png');
@@ -64,9 +78,15 @@ function startGame() {
 
         startTimer(game_duration_sec);
         carrot_counter.innerHTML = `${carrot_num}`;
+
+        //counter 초기화
+        counter = 0;
     });  
 };
 function stopGame() {
+    //background sound 정지
+    bg_sound.pause();
+
     //start버튼 나타남
     game_btn_icon.classList.add('fa-play');
     game_btn_icon.classList.remove('fa-stop');
@@ -100,6 +120,8 @@ function startTimer(time) {
     updateTimerText(time);
     timer_interval = setInterval(() => {
         if (time <= 0) {
+            bg_sound.pause();
+            bug_sound.play();
             clearInterval(timer_interval);
             //시간초과 후 pop-up섹션 등장, game_btn 사라짐, started상태 변경
             pop_up.classList.remove('pop-up--hide');
@@ -123,10 +145,12 @@ function onFieldClick(event) {
     }
     const clickTarget = event.target;
     if (clickTarget.matches('.carrot')) {
+        carrot_sound.play();
         clickTarget.remove();
         counter++;
         carrot_counter.innerText = carrot_num - counter;
         if (counter === carrot_num) {
+            win_sound.play();
             stopGame();
             started = !started;
             //counter 초기화
@@ -136,6 +160,7 @@ function onFieldClick(event) {
             pop_up_message.classList.add('now_win');
         }
     } else if (clickTarget.matches('.bug')) {
+        bug_sound.play();
         stopGame();
         started = !started;
         //counter 초기화
