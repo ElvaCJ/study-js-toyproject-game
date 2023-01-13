@@ -7,6 +7,7 @@
 * JS 기록 
   * function getRandomPosition과 function addItem을 선언하여 game_btn클릭 -> carrot.img와 bug.img 생성 및 포지션 randomly.
 
+
 #### second commit 
 * JS 기록
   * function updateTimerText과 function startTimer를 선언하여 동적 타이머 생성
@@ -23,6 +24,7 @@
   
   2. function startTimer 내부에 function updateTimerText를 선언하고 작성하면(setInterval의 디폴트 초기 딜레이를 해결하기 위해 바로 직전에 작성) 의도대로 실행이 안됨. 즉, 1초 후 timer모양이 등장. 그런데 function updateTmerText 선언을 function startTimer 바깥에서 해준 후 호출해주거나, function으로 선언하지 않은 채 내부 코드만 작성해주면 setInterval의 딜레이 없애줌. -> 왜????? 함수 안에 또다른 함수 선언하면 안되는 건가???
 
+
 #### third commit 
 * JS 기록
   * pop_up sectiion관련 동적 수행들 function startGame(), stopGame()에 추가 
@@ -33,3 +35,13 @@
   * conflict 발생해서 push기 안되는 오류를 처음 경험 -> branch를 새로 판 다음 기존 main branch에 merged해서 conflict resolved
   * 교휸1 : 작업 전 항상 git pull 먼저 해주기 -> branch가 main인 상태로 pull해주면 git fetch와 git merge를 동시에 되어 원격과 로컬이 동기화됨
   * 교훈2 : main 브랜치에 가급적 직접 푸시X -> 하루마다 브랜치를 새로 판 다음 깃허브에서 Merge Req하는 것이 바람직
+
+
+#### fourth commit
+* JS 기록
+  * onFieldClick()에 사운드 추가
+  *  #68~69 라인에 counter 초기화 코드작성 -> 당근을 다 못클릭하고 타임아웃 되어서 replay할 경우 과거 게임에서의 count기록이 리플레이된 새로운 게임에 영향을 주는 에러 해결
+  * carrot_num, bug_num에 1~15 사이의 정수 랜덤 부여
+* CSS 마무리 디테일
+  * .carrot, .bug에 hover 이벤트 적용 
+  * .game_timer, .carrot_counter에 user-select: none; 작성
